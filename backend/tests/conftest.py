@@ -3,7 +3,7 @@ import uuid
 import pytest
 import requests
 
-BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://cross-platform-ui-19.preview.emergentagent.com").rstrip("/")
+BASE_URL = os.environ.get("EXPO_PUBLIC_BACKEND_URL", "https://spice-guest-app.preview.emergentagent.com").rstrip("/")
 
 
 @pytest.fixture(scope="session")
