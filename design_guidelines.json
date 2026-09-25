@@ -1,0 +1,166 @@
+{
+  "app_name": "Sacred Spice Restaurant",
+  "personality": "3 Editorial Mobile LIGHT",
+  "personality_one_liner": "An elegant, magazine-like digital dining experience that builds anticipation through curated photography and generous whitespace.",
+  "color": {
+    "surface": "#FAF9F6",
+    "onSurface": "#1A1A1A",
+    "surfaceSecondary": "#F5F2EB",
+    "onSurfaceSecondary": "#1A1A1A",
+    "surfaceTertiary": "#EAE5D9",
+    "onSurfaceTertiary": "#1A1A1A",
+    "surfaceInverse": "#1A1A1A",
+    "onSurfaceInverse": "#FAF9F6",
+    "brand": "#C25934",
+    "brandPrimary": "#C25934",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#D98C2A",
+    "onBrandSecondary": "#1A1A1A",
+    "brandTertiary": "#8A9A86",
+    "onBrandTertiary": "#FFFFFF",
+    "success": "#4F7942",
+    "onSuccess": "#FFFFFF",
+    "warning": "#D98C2A",
+    "onWarning": "#1A1A1A",
+    "error": "#9B2C2C",
+    "onError": "#FFFFFF",
+    "info": "#6B6A65",
+    "onInfo": "#FFFFFF",
+    "border": "#EAE5D9",
+    "borderStrong": "#D4CEBF",
+    "divider": "#EAE5D9",
+    "muted": "#6B6A65",
+    "onBrand": "#FFFFFF"
+  },
+  "typography": {
+    "displayFontFamily": "PlayfairDisplay-Regular",
+    "textFontFamily": "Geist-Regular",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous magazine-like rhythms. Avoid dense cards. Let content breathe.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 0,
+    "md": 0,
+    "lg": 0,
+    "pill": 999
+  },
+  "shadow_tier": 0,
+  "navigation": "bottom_tabs",
+  "icon_set": "Feather",
+  "glassmorphism": {
+    "enabled": false,
+    "do's": [],
+    "dont's": [
+      "No glassmorphism used in Editorial personality to maintain print/magazine feel."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Outlet Selector & Home",
+      "purpose": "Anticipatory entry point showcasing locations and setting the dining expectation.",
+      "states": {
+        "loading": "Skeleton layout with slow fade.",
+        "empty": "No nearby outlets found. Elegant illustration with location search input.",
+        "error": "Unable to fetch locations. Clean text with retry action."
+      },
+      "layout": "Full-bleed hero images for each outlet with a top-to-bottom linear gradient scrim (transparent to 80% surfaceInverse). Display title pinned to the bottom 30%. Elegant tab bar at the bottom."
+    },
+    {
+      "name": "Menu Discover",
+      "purpose": "Browse and filter menu items with dietary and spice level preferences.",
+      "states": {
+        "loading": "List skeletons.",
+        "empty": "No items match selected filters (e.g., Vegan + High Spice). Clear filters CTA.",
+        "error": "Menu failed to load. Quiet error text and retry."
+      },
+      "layout": "Sticky header for category navigation. Filter chips (pill-shaped with hairline borders) underneath. Full-width item rows featuring high-quality right-aligned imagery, elegant typography, and dietary tags."
+    },
+    {
+      "name": "Item Detail",
+      "purpose": "Customize meal portions, spice levels, and modifiers before adding to cart.",
+      "states": {
+        "loading": "Image placeholder.",
+        "empty": "Item unavailable.",
+        "error": "Failed to load details."
+      },
+      "layout": "Edge-to-edge top hero image. Large Playfair display title. Clean radio groups with 1pt borders for options. Sticky primary CTA anchored at the bottom (safe area respected)."
+    },
+    {
+      "name": "Cart & Checkout",
+      "purpose": "Review order, select dining mode (pickup/delivery/dine-in), and view itemized charges.",
+      "states": {
+        "loading": "Processing order overlay.",
+        "empty": "Cart is empty. Suggestive 'Explore the Menu' CTA.",
+        "error": "Payment failed. Inline error highlighting."
+      },
+      "layout": "Minimalist line items separated by quiet dividers. Distinct breakdown block for Tax, Packaging, Service, and Total. Fixed bottom container for checkout button."
+    },
+    {
+      "name": "Order Tracking & Reservations",
+      "purpose": "Track live order status or view waitlist/reservation details.",
+      "states": {
+        "loading": "Spinner.",
+        "empty": "No active orders.",
+        "error": "Could not sync status."
+      },
+      "layout": "Vertical stepper timeline with Feather icons for tracking. Segmented controls for toggling between Orders and Reservations. High-contrast typography for wait times."
+    }
+  ],
+  "images": {
+    "hero_outlet": {
+      "url": "https://images.pexels.com/photos/29962487/pexels-photo-29962487.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Elegant fine dining restaurant interior with warm lighting"
+    },
+    "hero_menu": {
+      "url": "https://images.pexels.com/photos/17223836/pexels-photo-17223836.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "High quality Indian food thali"
+    },
+    "menu_item": {
+      "url": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxnb3VybWV0JTIwaW5kaWFuJTIwY3VycnklMjBkaXNoJTIwcGxhdGVkfGVufDB8fHx8MTc5MDMyNjc3NXww&ixlib=rb-4.1.0&q=85",
+      "alt": "Gourmet indian curry plated"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Adhere strictly to the Editorial Mobile LIGHT personality. Use full-width images, quiet dividers, and plenty of vertical whitespace.",
+    "Do NOT use glassmorphism, heavy shadows, or rounded cards. Maintain sharp edges (radius 0) and flat surfaces.",
+    "Typography hierarchy is crucial: Use the serif display font (PlayfairDisplay-Regular) for large titles, and sans-serif (Geist-Regular) for body and UI elements.",
+    "Implement a mandatory top-to-bottom gradient scrim (transparent to at least 70% surfaceInverse) whenever placing text over imagery (e.g., Outlet selection cards, Item detail hero).",
+    "The primary action button (e.g., 'Add to Cart', 'Checkout') must be sticky at the bottom, outside the scrolling area, respecting the safe area.",
+    "Filter chips for dietary tags and spice levels should have a subtle 1pt border and no background fill unless selected. Use the brandPrimary (Terracotta) for selected states.",
+    "Order timeline should be built using a vertical layout with quiet line dividers connecting the steps, emphasizing minimalist typography."
+  ],
+  "haptics": {
+    "button_press": "light",
+    "add_to_cart": "medium",
+    "tab_change": "selection",
+    "filter_toggle": "light",
+    "stepper_change": "light"
+  }
+}

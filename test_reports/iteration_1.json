@@ -1,0 +1,42 @@
+{
+  "summary": "Backend regression pytest (37 tests) built for the Sacred Spice Guest API — 36 pass, 1 fails with a real production bug in POST /api/auth/refresh (naive-vs-aware datetime comparison). All other flows verified: auth register→OTP→login, outlets & menu, cart with required modifier gating, quote validations (pickup/delivery/dine_in/scheduled-too-soon), place-order with idempotency dedupe, cancel, reorder, reservations (regular+high-demand→confirm, patch, cancel), waitlist join/current/leave, loyalty, promotions/eligible, notifications read-all, feedback with service-recovery for rating<=3, duplicate 409, profile patch, addresses CRUD. Frontend web preview (390x844) verified: login → outlet selector (Manhattan/Brooklyn/Jersey) → menu with filter chips (All, Chef's Specials, Vegetarian, Vegan, Jain, Halal, Gluten...) and Reserve-a-table CTA → item detail correctly gates add-to-cart behind required 'Choose choice of bread' modifier; classic 4-tab bar (Menu/Orders/Rewards/Profile) with testIDs tab-index/tab-orders/tab-rewards/tab-profile present.",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/auth/refresh", "issue": "Returns 500 Internal Server Error on valid refresh token. Root cause in server.py:221 — `old['expires_at'] < now()` compares a naive datetime read back from Mongo against timezone-aware now(). TypeError: can't compare offset-naive and offset-aware datetimes. Fix: store expires_at as ISO string via iso(...) like other datetime fields, OR normalise on read (e.g. old['expires_at'].replace(tzinfo=timezone.utc)).", "priority": "CRITICAL"}
+    ],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "props.pointerEvents", "issue": "Console warning: 'props.pointerEvents is deprecated. Use style.pointerEvents'. RN Web deprecation — locate and migrate usages (likely in TouchableOpacity/Pressable/View with pointerEvents prop) to style.pointerEvents."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_sacred_spice_api.py",
+    "/app/backend/tests/conftest.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix /api/auth/refresh datetime comparison bug in server.py:221 — store refresh_tokens.expires_at as ISO string (like accepted_at/created_at) or coerce to tz-aware on read. This currently breaks token rotation for every returning user after the first token expires.",
+    "Address 'props.pointerEvents is deprecated' RN-Web warning by migrating pointerEvents prop → style.pointerEvents."
+  ],
+  "critical_code_review_comments": [
+    "server.py is 1082 lines — a single monolithic module. Consider splitting into routers (auth, menu, cart, orders, reservations, loyalty, feedback) for maintainability.",
+    "Refresh token document uses tz-aware datetime on write (now() + timedelta) but Motor/PyMongo returns naive datetime on read (BSON strips tzinfo by default). Every other timestamp is stored via iso() as string, so this is the outlier. Recommend normalising the storage strategy.",
+    "compute_quote's promo `first_order_only` counts prior orders including cancelled — the $nin filter correctly excludes cancelled/failed, good."
+  ],
+  "updated_files": [
+    "/app/backend/tests/__init__.py",
+    "/app/backend/tests/conftest.py",
+    "/app/backend/tests/test_sacred_spice_api.py"
+  ],
+  "success_rate": {"backend": "97%", "frontend": "100% (smoke)"},
+  "seed_data_creation": "No seed data created. Tests create ephemeral guest accounts (test_<uuid>@example.com) for register/OTP verification and TEST_-labelled addresses which are cleaned up in-test.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Full pytest regression at /app/backend/tests/test_sacred_spice_api.py runs against the public preview URL. Runs under pytest.ini's fixed `-n 2 --dist loadscope`; cart/order/feedback tests are consolidated into TestCartAndQuote so they share the priya seed user on one xdist worker (avoids cross-worker cart races). The seed guest priya@example.com has already placed orders in the DB from prior test runs, so WELCOME10 (first-order-only) does NOT apply — the quote test only asserts the endpoint shape, not discount value.",
+  "rca_of_issue": "POST /api/auth/refresh 500 → Traceback: File server.py line 221, `old['expires_at'] < now()` raises TypeError: can't compare offset-naive and offset-aware datetimes. Reproduction: (1) login priya@example.com to obtain a refresh_token; (2) POST /api/auth/refresh {\"refresh_token\": <token>} → 500. Mitigation: change insert in issue_pair() to `\"expires_at\": iso(now() + timedelta(days=REFRESH_DAYS))` and parse back with datetime.fromisoformat() on comparison; or coerce read-side with `.replace(tzinfo=timezone.utc)` before comparison."
+}
